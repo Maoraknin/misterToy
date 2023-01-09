@@ -1,0 +1,41 @@
+body {
+    margin: 0;
+    height: 100vh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+#root {
+    height: 100%;
+  }
+  
+  .app {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 70px 1fr 150px;
+  }
+
+  .icon{
+    cursor: pointer;
+    font-size: 2rem !important;
+}
+
+

@@ -1,0 +1,14 @@
+.toy-list {
+    justify-content: center;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+}
+
+.preview-toy-container{
+    display: flex;
+    padding-bottom: 20px;
+    justify-content: space-around;
+}
+

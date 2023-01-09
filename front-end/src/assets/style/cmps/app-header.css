@@ -1,0 +1,58 @@
+
+header {
+    background-color: var(--clr0);
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 2px 6px 0px, rgb(218, 220, 224) 0px -1px 0px 0px inset;
+    color: var(--clr1);
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+}
+
+.app-header .app-header-logo{
+    font-size: 2.3rem;
+    margin: 0;
+    align-self: center;
+    padding-left: 2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+
+.header-nav{
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+nav a{
+    display: inline-block;
+    margin: 3px;
+    padding: 20px;
+    border-bottom: 1px solid transparent;
+    text-decoration: none;
+}
+nav a:hover{
+    color: whitesmoke;
+}
+
+.active{
+    font-weight: 900;
+    border-bottom: 3px solid var(--clr1);
+    
+}
+
+
+/* 
+.user-info{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.login-container{
+    gap: 10px;
+} */
+

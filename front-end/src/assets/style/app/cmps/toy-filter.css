@@ -1,0 +1,45 @@
+.toy-filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin-bottom: 20px;
+}
+
+
+.input-filter {
+    background-color: rgb(246, 246, 246);
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding: 10px;
+}
+
+.input-filter:focus-visible {
+    outline: none;
+}
+
+
+.filter-btn-container {
+    display: flex;
+    /* margin: 0 auto; */
+    /* justify-content :center; */
+    /* margin-bottom: 0.6rem; */
+    /* align-items: center; */
+    /* gap: 20px; */
+}
+
+
+.add-toy-btn {
+    background-color: var(--clr0);
+    color: var(--clr1);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 1rem;
+    font-size: 1rem;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.add-toy-btn:hover {
+    background-color: rgb(164, 164, 164);
+}
