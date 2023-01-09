@@ -4,7 +4,7 @@ import {storageService} from './async-storage.service.js'
 // import { userService } from './user.service.js'
 
 const STORAGE_KEY = 'toyDB'
-const PAGE_SIZE = 2
+const PAGE_SIZE = 5
 
 export const toyService = {
     query,

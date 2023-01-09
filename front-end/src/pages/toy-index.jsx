@@ -1,4 +1,5 @@
 
+import { Outlet, Link } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useRef, useState } from "react"
 import { toyService } from '../services/toy.service.js'
@@ -7,7 +8,6 @@ import { ToyList } from '../cmps/toy-list.jsx'
 import { ToyFilter } from '../cmps/toy-filter.jsx'
 import { loadToys, saveToy, removeToy, setFilter } from '../store/toy.action.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
-import { ToyAdd } from '../cmps/toy-add.jsx'
 // import { update } from '../store/user.action.js'
 
 
@@ -16,7 +16,6 @@ export function ToyIndex() {
     const toys = useSelector((storeState) => storeState.toyModule.toys)
     const filterBy = useSelector((storeState) => storeState.toyModule.filterBy)
     const isLoading = useSelector((storeState) => storeState.toyModule.isLoading)
-    const [isAddOpen, setIsAddOpen] = useState(false)
 
 
     useEffect(() => {
@@ -46,52 +45,6 @@ export function ToyIndex() {
     }
 
 
-    function addToy(toyToSave){
-        saveToy(toyToSave)
-            .then((savedToy) => {
-                // userService.addActivity(savedToy, 'Added')
-                showSuccessMsg(`Toy added (id: ${savedToy._id})`)
-                loadToys()
-            })
-            .catch(err => {
-                showErrorMsg('Cannot add toy')
-            })
-
-    }
-
-    function onEditToy(toy) {
-        const name = prompt('New text?')
-        const toyToSave = { ...toy, name }
-
-        saveToy(toyToSave)
-            .then((savedToy) => {
-                // userService.addActivity(savedToy, 'Edited')
-                showSuccessMsg(`Toy updated to price: $${savedToy.name}`)
-            })
-            .catch(err => {
-                showErrorMsg('Cannot update toy')
-            })
-    }
-
-
-    function onUpdateToy(toy) {
-
-        const msg = toy.isDone ? 'Marked' : 'Unmarked'
-
-        saveToy(toy)
-            .then(() => {
-                // userService.addActivity(toy, msg, true)
-                // .then((user) => update(user))
-            })
-            .catch(err => {
-                showErrorMsg('Cannot update toy', err)
-            })
-
-    }
-
-    function onToggleAddToy(){
-        setIsAddOpen(!isAddOpen)
-    }
 
     return <section className="toy-index">
         <h1 className='toy-index-title'>My Toys:</h1>
@@ -103,9 +56,9 @@ export function ToyIndex() {
                     <button onClick={onAddToy} className="add-toy-btn">Add Toy</button>
                 </div> */}
                 <div className='add-toy-container'>
-                <button onClick={onToggleAddToy} className={isAddOpen ? "add-toy-btn hidden" : "add-toy-btn"}>Add Toy</button>
+                <Link to="/toy/edit" className= "add-toy-btn">Add Toy</Link>
 
-                {isAddOpen && <ToyAdd addToy={addToy} onToggleAddToy={onToggleAddToy}/>}
+                <Outlet/>
                 </div>
             </div>
 
@@ -113,8 +66,6 @@ export function ToyIndex() {
             {isLoading ? <p>Loading...</p> : <div>{toys.length ? <ToyList
                 toys={toys}
                 onRemoveToy={onRemoveToy}
-                onEditToy={onEditToy}
-                onUpdateToy={onUpdateToy}
             /> : <h1>No toys to show</h1>}</div>
             }
 
