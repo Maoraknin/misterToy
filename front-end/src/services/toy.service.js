@@ -102,14 +102,24 @@ function getEmptyToy() {
     ]
   }
 
+
+
   function getPriceMap(toys){
     const priceMap = toys.reduce((acc, toy) => {
-        if(toy.labels.length) {
-            // toy.labels.map(label => return {label: label, price: toy.price})
+        if(toy.labels?.length) {
+              toy.labels.map(label=>{
+                if(!acc[label]) acc[label] = []
+                acc[label].push(toy.price)
+            })
         }
-        return ++acc
         console.log('acc:',acc)
-    }, [])
+        return acc
+    }, {})
     console.log('priceMap:',priceMap)
   }
 
+
+//   var x = {
+//     "art": [23],
+//     "wheels": [23,58,5],
+//   }

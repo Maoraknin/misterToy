@@ -13,13 +13,17 @@ import { toyService } from '../services/toy.service.js'
 
 export function PriceChart(){
 
-    const [prices, setPrices] = useState([])
+    const [priceMap, setPriceMap] = useState({})
 
     useEffect(() => {
         console.log('prices:',prices)
-        toyService.query().then(toys => toyService.getPriceMap(toys))
+        toyService.query().then(toys => setPriceMap(toyService.getPriceMap(toys)))
         // toyService.getToysInStock().then(toys => setCounter(toyService.getFilteredToysByLabel(toys)))
     }, [])
+
+    // function getNameMap(){
+
+    // }
 
     
     ChartJS.register(RadialLinearScale, ArcElement, Tooltip, Legend);
