@@ -3,13 +3,16 @@ import { useEffect, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { loadToys, saveToy } from '../store/toy.action.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
+import Select from 'react-select'
+import makeAnimated from 'react-select/animated';
 
 import { toyService } from "../services/toy.service.js"
 
 
-export function ToyEdit({ addToy, onToggleAddToy }) {
+export function ToyEdit({ editToy }) {
 
     const navigate = useNavigate()
+    const animatedComponents = makeAnimated();
 
     const [editedToy, setEditedToy] = useState(toyService.getEmptyToy())
     const { toyId } = useParams()
@@ -33,6 +36,7 @@ export function ToyEdit({ addToy, onToggleAddToy }) {
         let { value, type, name: field, checked } = target
         value = type === 'number' ? +value : value
         value = type === 'checkbox' ? checked : value
+        console.log('value:', value)
 
         setEditedToy((prevToy) => {
             if (field === 'labels') {
@@ -52,24 +56,36 @@ export function ToyEdit({ addToy, onToggleAddToy }) {
         })
     }
 
-    function onAddToy(ev) {
-        ev.preventDefault()
-        navigate('/toy')
-        // onToggleAddToy()
-        // if (editedToy.labels.length) editedToy.labels = editedToy.labels.split(',')
-        addToy(editedToy)
+    function handleSelectChange(pickedLabels) {
+        const { value } = pickedLabels[pickedLabels.length - 1]
+        console.log('pickedLabels:',pickedLabels)
+        console.log('value:',value)
 
-        
+        setEditedToy((prevToy) => {
+            console.log('prevToy:',prevToy)
+            prevToy.labels.push(value)
+            console.log('prevToy.labels:',prevToy.labels)
+            return { ...prevToy, labels: prevToy.labels }
+
+        })
 
     }
 
-    function addToy(toyToSave){
+    function onEditToy(ev) {
+        ev.preventDefault()
+        navigate('/toy')
+        editToy(editedToy)
+
+
+
+    }
+
+    function editToy(toyToSave) {
         saveToy(toyToSave)
             .then((savedToy) => {
                 // userService.addActivity(savedToy, 'Edited')
                 showSuccessMsg(`Toy edited (id: ${savedToy._id})`)
                 loadToys()
-                // navigate('/toy')
                 console.log('here');
             })
             .catch(err => {
@@ -78,16 +94,29 @@ export function ToyEdit({ addToy, onToggleAddToy }) {
 
     }
 
+    const labels = toyService.getLabels()
+
+    // const labels = [
+    //     { value: '', label: '---Labels---' },
+    //     { value: 'on-wheels', label: 'On wheels' },
+    //     { value: 'box-game', label: 'Box game' },
+    //     { value: 'art', label: 'Art' },
+    //     { value: 'baby', label: 'Baby' },
+    //     { value: 'doll', label: 'Doll' },
+    //     { value: 'puzzle', label: 'Puzzle' },
+    //     { value: 'outdoor', label: 'Outdoor' },
+    //     { value: 'battery-powered', label: 'Battery Powered' }
+    // ]
+
 
 
     return <section className="add-toy">
         <div className="flex space-between">
             <h2 className="add-toy-title">Add new Toy</h2>
             <Link to="/toy"><span className="material-symbols-outlined icon">close</span></Link>
-            
-            {/* <span onClick={onToggleAddToy} className="material-symbols-outlined icon">close</span> */}
+
         </div>
-        <form onSubmit={onAddToy} className="add-toy-form">
+        <form onSubmit={onEditToy} className="add-toy-form">
             <div>
                 <label htmlFor="name">Name : </label>
                 <input type="text"
@@ -100,17 +129,15 @@ export function ToyEdit({ addToy, onToggleAddToy }) {
             </div>
             <div>
                 <label htmlFor="labels">Labels : </label>
-                <select name="labels" id="labels" onChange={handleChange}>
-                    <option value="">--labels--</option>
-                    <option value="on-wheels">On wheels</option>
-                    <option value="box-game">Box game</option>
-                    <option value="art">Art</option>
-                    <option value="baby">Baby</option>
-                    <option value="doll">Doll</option>
-                    <option value="puzzle">Puzzle</option>
-                    <option value="outdoor">Outdoor</option>
-                    <option value="battery-powered">Battery Powered</option>
-                </select>
+                <Select
+                    isMulti
+                    options={labels}
+                    name="labels"
+                    id="labels"
+                    onChange={handleSelectChange}
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                />
             </div>
             <div>
                 <label htmlFor="price">Price: </label>
@@ -126,11 +153,11 @@ export function ToyEdit({ addToy, onToggleAddToy }) {
                 <input type="checkbox"
                     id="inStock"
                     name="inStock"
-                    checked = {editedToy.inStock}
+                    checked={editedToy.inStock}
                     onChange={handleChange}
                 />
             </div>
-            {/* <Link to="/toy"  className="add-toy-btn">Add</Link> */}
+
             <button className="add-toy-btn">Save</button>
 
         </form>

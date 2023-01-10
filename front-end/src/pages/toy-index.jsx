@@ -1,12 +1,12 @@
 
 import { Outlet, Link } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useRef, useState } from "react"
-import { toyService } from '../services/toy.service.js'
+import { useSelector } from 'react-redux'
+import { useEffect } from "react"
+// import { toyService } from '../services/toy.service.js'
 // import { userService } from '../services/user.service.js'
 import { ToyList } from '../cmps/toy-list.jsx'
 import { ToyFilter } from '../cmps/toy-filter.jsx'
-import { loadToys, saveToy, removeToy, setFilter } from '../store/toy.action.js'
+import { loadToys, removeToy, setFilter } from '../store/toy.action.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
 // import { update } from '../store/user.action.js'
 

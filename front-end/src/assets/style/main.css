@@ -1,7 +1,7 @@
 /* Setup */
 @import 'setup/variables.css';
 
-/* @import './setup/fonts.css'; */
+@import 'setup/fonts.css';
 
 /* Basics */
 @import 'basics/base.css';
@@ -20,4 +20,4 @@
 @import 'app/cmps/toy-filter.css';
 @import 'app/cmps/toy-preview.css';
 @import 'app/cmps/toy-add.css';
-/* @import 'cmps/user-msg.css'; */
+@import 'cmps/user-msg.css';

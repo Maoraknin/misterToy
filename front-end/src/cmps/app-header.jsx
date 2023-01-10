@@ -12,12 +12,10 @@ export function AppHeader() {
             </Link>
 
             <nav>
-                <NavLink to="/">Home</NavLink> |
-                <NavLink to="/toy">Toys</NavLink> |
-                <NavLink to="/about">About</NavLink> |
-                {/* <a href="#" onClick={onToggleCart}>
-                    🛒 Cart
-                </a> */}
+                <NavLink to="/">Home</NavLink> 
+                <NavLink to="/toy">Toys</NavLink> 
+                <NavLink to="/about">About</NavLink> 
+                <NavLink to="/dashboard">Dashboard</NavLink>
             </nav>
 
         </header>

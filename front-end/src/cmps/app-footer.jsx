@@ -1,5 +1,5 @@
 
-// import { UserMsg } from "../cmps/user-msg.jsx"
+import { UserMsg } from "../cmps/user-msg.jsx"
 
 export function AppFooter() {
 
@@ -10,7 +10,7 @@ export function AppFooter() {
                 coffeerights to all
 
             </p>
-                {/* <UserMsg /> */}
+                <UserMsg />
         </footer>
     )
 

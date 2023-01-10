@@ -1,10 +1,9 @@
 
-import {storageService} from './async-storage.service.js'
-// import {utilService} from './util.service.js'
-// import { userService } from './user.service.js'
+// import {storageService} from './async-storage.service.js'
+import { httpService } from './http.service.js'
 
-const STORAGE_KEY = 'toyDB'
-const PAGE_SIZE = 5
+
+const BASE_URL = 'toy/'
 
 export const toyService = {
     query,
@@ -12,49 +11,33 @@ export const toyService = {
     save,
     remove,
     getEmptyToy,
-    getDefaultFilter
+    getDefaultFilter,
+    getToysInStock,
+    getFilteredToysByLabel,
+    getLabels,
+    getPriceMap
 }
-
 
 function query(filterBy = getDefaultFilter()) {
-    return storageService.query(STORAGE_KEY)
-    .then(toys =>{
-        let filteredToys = toys
-
-        if(filterBy.inStock){
-            filteredToys = filteredToys.filter(toy => toy.inStock)
-        } 
-        if(filterBy.labels !== ''){
-            filteredToys = filteredToys.filter(toy => toy.labels.includes(filterBy.labels))
-        }
-        if (filterBy.name) {
-            const regex = new RegExp(filterBy.name, 'i')
-            filteredToys = filteredToys.filter(toy => regex.test(toy.name))
-        }
-        if (filterBy.pageIdx !== undefined) {
-            const startIdx = filterBy.pageIdx * PAGE_SIZE
-            filteredToys = filteredToys.slice(startIdx, PAGE_SIZE + startIdx)
-        }
-
-        return filteredToys
-
-    } )
+    const queryParams = `?name=${filterBy.name}&labels=${filterBy.labels}&inStock=${filterBy.inStock}&pageIdx=${filterBy.pageIdx}`
+    return httpService.get(BASE_URL + queryParams)
 }
+
+
 function getById(toyId) {
     console.log(toyId);
-    return storageService.get(STORAGE_KEY, toyId)
+    return httpService.get(BASE_URL + toyId)
     .then(toy => ({...toy, smsg:'Very good Product!!!'}))
 }
 function remove(toyId) {
-    return storageService.remove(STORAGE_KEY, toyId)
+    return httpService.delete(BASE_URL + toyId)
 }
 function save(toy) {
     console.log('toy:',toy)
     if (toy._id) {
-        return storageService.put(STORAGE_KEY, toy)
+        return httpService.put(BASE_URL, toy)
     } else {
-        // toy.owner = userService.getLoggedinUser()
-        return storageService.post(STORAGE_KEY, toy)
+        return httpService.post(BASE_URL, toy)
     }
 }
 
@@ -68,14 +51,65 @@ function getEmptyToy() {
     }
 }
 
-// function getReadPercent(){
-//     return storageService.query(STORAGE_KEY)
-//       .then(toys => {
-//         const newToys = toys.filter(toy => toy.isDone)
-//         return Math.ceil((newToys.length / toys.length) * 100)
-//       })
-//   }
 
   function getDefaultFilter() {
     return {  name: '', pageIdx:0, labels: '' }
   }
+
+  function getToysInStock(){
+    let filter = getDefaultFilter()
+    filter.inStock = true
+    return query(filter)
+
+  }
+
+  function getFilteredToysByLabel(toys){
+    const labels = [
+        { name: 'on-wheels', count: 0},
+        { name: 'box-game', count: 0},
+        { name: 'art', count: 0},
+        { name: 'baby', count: 0},
+        { name: 'doll', count: 0},
+        { name: 'puzzle', count: 0},
+        { name: 'outdoor', count: 0},
+        { name: 'battery-powered', count: 0}
+    ]
+
+
+    toys.map(toy => {
+        labels.map(label => {
+            if(toy.labels.includes(label.name)) label.count++
+        })
+    })
+
+    const countedLabels = []
+    labels.map(label => countedLabels.push(label.count))
+    return countedLabels
+
+  }
+
+  function getLabels() {
+    return  [
+        { value: '', label: '---Labels---' },
+        { value: 'on-wheels', label: 'On wheels' },
+        { value: 'box-game', label: 'Box game' },
+        { value: 'art', label: 'Art' },
+        { value: 'baby', label: 'Baby' },
+        { value: 'doll', label: 'Doll' },
+        { value: 'puzzle', label: 'Puzzle' },
+        { value: 'outdoor', label: 'Outdoor' },
+        { value: 'battery-powered', label: 'Battery Powered' }
+    ]
+  }
+
+  function getPriceMap(toys){
+    const priceMap = toys.reduce((acc, toy) => {
+        if(toy.labels.length) {
+            // toy.labels.map(label => return {label: label, price: toy.price})
+        }
+        return ++acc
+        console.log('acc:',acc)
+    }, [])
+    console.log('priceMap:',priceMap)
+  }
+

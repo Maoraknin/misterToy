@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react"
 import { toyService } from "../services/toy.service.js"
+import Select from 'react-select'
 import { utilService } from "../services/util.service.js"
 
 
 
 export function ToyFilter({ setFilterBy }) {
     const [filterByToEdit, setFilterByToEdit] = useState(toyService.getDefaultFilter())
+
+    // const labels = ["On wheels", "Box game", "Art", "Baby", "Doll", "Puzzle", "Outdoor", "Battery Powered"]
+
+    const labels = toyService.getLabels()
 
 
     // setFilterBy = useRef(utilService.debounce(setFilterBy))
@@ -16,15 +21,25 @@ export function ToyFilter({ setFilterBy }) {
 
 
     function handleTypeChange({ target }) {
-        const { value, name: field, type, checked } = target
+            const { value, name: field, type, checked } = target
 
-        setFilterByToEdit((prevFilter) => {
-            if (type === 'checkbox') return { ...prevFilter, [field]: checked }
-            return ({ ...prevFilter, [field]: value })
+            setFilterByToEdit((prevFilter) => {
+                if (type === 'checkbox') return { ...prevFilter, [field]: checked }
+                return ({ ...prevFilter, [field]: value })
 
-        })
+            })
 
-    }
+        }
+
+        function handleSelectChange(target){
+            const { value } = target
+            console.log('filterByToEdit:',filterByToEdit)
+
+            setFilterByToEdit((prevFilter) => {
+                return ({ ...prevFilter, labels: [value] })
+            })
+
+        }
 
 
 
@@ -45,7 +60,7 @@ export function ToyFilter({ setFilterBy }) {
         />
 
         <label htmlFor="labels">Labels : </label>
-        <select name="labels" id="labels" onChange={handleTypeChange}>
+        {/* <select name="labels" id="labels" onChange={handleTypeChange}>
             <option value="">--labels--</option>
             <option value="on-wheels">On wheels</option>
             <option value="box-game">Box game</option>
@@ -55,7 +70,13 @@ export function ToyFilter({ setFilterBy }) {
             <option value="puzzle">Puzzle</option>
             <option value="outdoor">Outdoor</option>
             <option value="battery-powered">Battery Powered</option>
-        </select>
+        </select> */}
+        <Select
+            options={labels}
+            name="labels"
+            id="labels"
+            onChange={handleSelectChange}
+        />
 
     </section>
     )
