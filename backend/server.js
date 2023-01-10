@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 const toyService = require('./services/toy.service.js')
 // const userService = require('./services/user.service.js')
 const cors = require('cors')
+const path = require('path')
 const app = express()
 
 // App configuration
