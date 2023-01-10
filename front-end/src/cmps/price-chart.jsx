@@ -13,11 +13,11 @@ import { toyService } from '../services/toy.service.js'
 
 export function PriceChart(){
 
-    const [priceMap, setPriceMap] = useState({})
+    // const [priceMap, setPriceMap] = useState({})
 
     useEffect(() => {
-        console.log('prices:',prices)
-        toyService.query().then(toys => setPriceMap(toyService.getPriceMap(toys)))
+        // console.log('prices:',prices)
+        // toyService.query().then(toys => setPriceMap(toyService.getPriceMap(toys)))
         // toyService.getToysInStock().then(toys => setCounter(toyService.getFilteredToysByLabel(toys)))
     }, [])
 
