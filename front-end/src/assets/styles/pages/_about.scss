@@ -1,0 +1,17 @@
+.btn-map{
+    @include btn($type: round, $padding: em(8px) em(17px), $clr: $clr2)
+}
+
+.map-btn-container{
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.about-title{
+    font-size: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+    color: $clr2;
+}

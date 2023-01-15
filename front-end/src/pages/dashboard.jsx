@@ -6,7 +6,7 @@ import { PriceChart } from '../cmps/price-chart.jsx'
 
 export function Dashboard() {
 
-    return <section className='flex'>
+    return <section className='flex dashboard'>
         <InStockChart/>
         <PriceChart/>
 

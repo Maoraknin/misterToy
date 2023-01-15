@@ -8,8 +8,19 @@ export function InStockChart(){
     const [counter, setCounter] = useState([])
 
     useEffect(() => {
-        toyService.getToysInStock().then(toys => setCounter(toyService.getFilteredToysByLabel(toys)))
+        loadChart()
     }, [])
+    
+    
+    async function loadChart(){
+        const toys = await toyService.getToysInStock()
+        try{
+            setCounter(toyService.getFilteredToysByLabel(toys))
+        }catch(err){
+            console.error('Had a problem load chart', err)
+        }
+
+    }
 
 
 
@@ -47,8 +58,8 @@ export function InStockChart(){
     };
 
 
-    return <div style={{ width: '30%', margin: 'auto' }}>
-        <h2>In Stock</h2>
+    return <div style={{ width: '30%', margin: 'auto', minWidth: '350px' }}>
+        <h2 className='graph-title'>In Stock</h2>
         <Pie data={data} />
     </div>
 }

@@ -1,0 +1,63 @@
+
+.add-toy{
+    background-color: rgb(248, 248, 248);
+    z-index: 1;
+    position: absolute;
+    padding: 1rem;
+    text-align: center;
+    left: 50%;
+    top: 0;
+    transform: translate(-50%, 0);
+    border-radius: 10px;
+    box-shadow: 0px 8px 10px 1px rgb(0 0 0 / 14%), 0px 3px 14px 2px rgb(0 0 0 / 12%), 0px 5px 5px -3px rgb(0 0 0 / 20%);
+    
+}
+
+.add-toy-btn{
+    @include btn($type: round, $padding: em(12px) em(42px), $bg: $clr5, $clr: $clr0,);
+    margin: 0 auto;
+    // background-color: var(--clr0);
+    // color: var(--clr1);
+    // border: none;
+    // padding: 0.5rem 1rem;
+    // border-radius: 1rem;
+    // font-size: 1rem;
+    // margin: 0 auto;
+    // cursor: pointer;
+    // &:hover{
+    //     background-color: rgb(34, 33, 37);
+
+    // }
+}
+
+
+.add-toy-container{
+    position: relative;
+    display: flex;
+}
+
+.add-toy-title{
+    margin-top: 0;
+}
+
+.add-toy-form{
+    display: flex;
+    flex-direction: column;
+    .add-input-container{
+        display: flex;
+        justify-content:space-between;
+        margin-bottom: 0.6rem;
+        align-items: center;
+        gap: 20px;
+    }
+
+    input{
+        @include input()
+    }
+
+    .inStock-container{
+        justify-content:left;
+    }
+
+} 
+

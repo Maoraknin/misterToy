@@ -1,0 +1,10 @@
+.btn-sort{
+    @include btn($type: round, $padding: em(6px) em(12px))
+}
+
+.sort-container{
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 20px;
+}

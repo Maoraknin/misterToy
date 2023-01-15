@@ -1,0 +1,36 @@
+.details-toy-img{
+    max-width: 300px;
+}
+
+.add-msg-btn, .add-review-btn{
+    @include btn($type: round, $padding: em(8px) em(24px), $bg: $clr5, $clr: $clr0,);
+}
+
+.add-msg-form, .add-review-form{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    .msg-input{
+        @include input()
+    }
+
+}
+.msg-container{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .remove-msg{
+        cursor: pointer;
+    }
+}
+
+.review-container{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+
+    .remove-review{
+        cursor: pointer;
+    }
+}

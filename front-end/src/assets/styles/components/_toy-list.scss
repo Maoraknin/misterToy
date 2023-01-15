@@ -1,0 +1,16 @@
+.toy-list {
+    justify-content: center;
+    list-style: none;
+    // display: flex;
+    // flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    padding: 0;
+}
+
+.preview-toy-container{
+    display: flex;
+    padding-bottom: 20px;
+    justify-content: space-around;
+}
+

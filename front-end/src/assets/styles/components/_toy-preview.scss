@@ -1,0 +1,54 @@
+.toy-preview {
+    background-color: $clr0;
+    color: $clr1;
+    border-radius: .2em;
+    // margin: 5px;
+    // text-align: center;
+    padding: 10px;
+    max-width: 300px;
+    min-height: 300px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    a {
+        color: rgb(180, 180, 180);
+        font-weight: 500;
+    }
+
+    p{
+        margin: 0.3rem;
+    }
+
+    .toy-name{
+        cursor: pointer;
+        color: $clr2;
+    }
+}
+
+.priview-img-container {
+
+    width: 100%;
+    height: 200px;
+    padding-bottom: 10px;
+    cursor: pointer;
+
+    .priview-img {
+        object-fit: contain;
+
+
+    }
+}
+
+
+// .toy-preview a {
+//     color: rgb(180, 180, 180);
+//     font-weight: 500;
+// }
+
+// .done-indicator{
+//     position: absolute;
+//     top: 5px;
+//     right: 5px;
+// }

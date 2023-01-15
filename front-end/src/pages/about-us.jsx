@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import GoogleMapReact from 'google-map-react';
+import 'animate.css';
 
 export function AboutUs() {
 
 
   const AnyReactComponent = ({ text }) => <div>{text}</div>;
   const [coordinates, setCoordinates] = useState({ lat: 32.0853, lng: 34.7818 })
-  const zoom = 8
+  const zoom = 9
 
   const handleClick = ({ lat, lng }) => {
     setCoordinates({ lat, lng })
@@ -14,7 +15,8 @@ export function AboutUs() {
 
   return (
     // Important! Always set the container height explicitly
-    <div style={{ height: '50vh', width: '50%', margin: 'auto' }}>
+    <div style={{ height: '50vh', width: '50%',minWidth:'350px', margin: '0 auto' }} className='animate__animated animate__fadeIn'>
+      <h2 className="about-title">Our Branches</h2>
       <GoogleMapReact
         onClick={handleClick}
         bootstrapURLKeys={{ key: "AIzaSyCB0AieRfE8jFeAQWL8okf7J69APWc8VTI" }}
@@ -41,9 +43,11 @@ export function AboutUs() {
           text={<span style={{ color: 'red', fontWeight: '900' }} className="material-symbols-outlined">location_on</span>}
         />
       </GoogleMapReact>
-      <button onClick={() => handleClick({lat :31.8, lng: 35})}>Jerusalem</button>
-      <button onClick={() => handleClick({lat :32.5, lng: 35})}>Pardes Hanna</button>
-      <button onClick={() => handleClick({lat :31.5, lng: 34.6})}>Sderot</button>
+      <div className="map-btn-container">
+        <button className="btn-map" onClick={() => handleClick({ lat: 31.8, lng: 35 })}>Jerusalem</button>
+        <button className="btn-map" onClick={() => handleClick({ lat: 32.5, lng: 35 })}>Pardes Hanna</button>
+        <button className="btn-map" onClick={() => handleClick({ lat: 31.5, lng: 34.6 })}>Sderot</button>
+      </div>
     </div>
   );
 

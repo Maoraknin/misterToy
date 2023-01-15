@@ -1,0 +1,50 @@
+.login{
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: start;
+padding-top: 40px;
+gap: 30px;
+
+    .login-form{
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+        align-items: center;
+
+        div{
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        input{
+            @include input($type: round, $width:300px);
+
+            @include for-mobile-layout{
+                width: 200px;
+            }
+        }
+
+        .login-btn{
+            @include btn($type: round, $padding: em(12px) em(42px));
+        }
+
+    }
+    
+    .logout-btn{
+        @include btn($type: round, $padding: em(12px) em(42px));
+    }
+
+    .user-profile{
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+
+    .user-greeting{
+        color:  $clr1;
+        font-size: 2rem;
+    }
+}

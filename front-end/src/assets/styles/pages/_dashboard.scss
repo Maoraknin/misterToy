@@ -1,0 +1,15 @@
+.dashboard{
+    text-align: center;
+
+    @media (max-width: 720px) {
+        flex-direction: column;
+        gap: 50px;
+    }
+}
+
+.graph-title{
+    font-size: 1.5rem;
+    margin: 1rem 0;
+    text-align: center;
+    color: $clr5;
+}

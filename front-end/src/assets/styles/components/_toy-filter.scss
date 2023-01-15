@@ -1,0 +1,55 @@
+.toy-filter {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    margin-bottom: 20px;
+}
+
+
+.input-filter {
+    // background-color: rgb(246, 246, 246);
+    // border: 1px solid black;
+    // border-radius: 1rem;
+    // padding: 10px;
+
+    // &:focus-visible {
+    //     outline: none;
+    // }
+    @include input($type: round, $width:300px);
+    margin-bottom: 20px;
+}
+
+.label-filter-container{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .filter-select{
+        height: 20px;
+    }
+}
+
+.bottom-filter-container{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+}
+
+// .input-filter:focus-visible {
+//     outline: none;
+// }
+
+
+.filter-btn-container {
+    display: flex;
+    /* margin: 0 auto; */
+    /* justify-content :center; */
+    /* margin-bottom: 0.6rem; */
+    /* align-items: center; */
+    /* gap: 20px; */
+}
+
+

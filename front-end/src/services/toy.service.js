@@ -1,5 +1,4 @@
 
-// import {storageService} from './async-storage.service.js'
 import { httpService } from './http.service.js'
 
 
@@ -15,31 +14,44 @@ export const toyService = {
     getToysInStock,
     getFilteredToysByLabel,
     getLabels,
-    getPriceMap
+    getPriceMap,
+    getDefaultSort,
+    addToyMsg,
+    removeToyMsg,
+    addToyReview,
+    removeToyReview
 }
 
-function query(filterBy = getDefaultFilter()) {
-    const queryParams = `?name=${filterBy.name}&labels=${filterBy.labels}&inStock=${filterBy.inStock}&pageIdx=${filterBy.pageIdx}`
+function query(filterBy = getDefaultFilter(), sortBy = getDefaultSort()) {
+    const queryParams = `?name=${filterBy.name}&labels=${filterBy.labels}&inStock=${filterBy.inStock}&pageIdx=${filterBy.pageIdx}&sortByVal=${sortBy.value}&sortByChange=${sortBy.change}`
     return httpService.get(BASE_URL + queryParams)
+    // return httpService.get(BASE_URL + { params: { filterBy } })
 }
 
 
-function getById(toyId) {
-    console.log(toyId);
-    return httpService.get(BASE_URL + toyId)
-    .then(toy => ({...toy, smsg:'Very good Product!!!'}))
+async function getById(toyId) {
+    try {
+        const toy = await httpService.get(BASE_URL + toyId)
+        return { ...toy, smsg: 'Very good Product!!!' }
+    } catch (err) {
+        throw new Error('cant get toy', err)
+    }
 }
+
+
 function remove(toyId) {
     return httpService.delete(BASE_URL + toyId)
 }
+
+
 function save(toy) {
-    console.log('toy:',toy)
     if (toy._id) {
-        return httpService.put(BASE_URL, toy)
+        return httpService.put(BASE_URL + toy._id, toy)
     } else {
         return httpService.post(BASE_URL, toy)
     }
 }
+
 
 function getEmptyToy() {
     return {
@@ -51,34 +63,84 @@ function getEmptyToy() {
     }
 }
 
+async function addToyMsg(toyId, txt) {
+    try {
+        const savedMsg = await httpService.post(`toy/${toyId}/msg`, { txt })
+        return savedMsg
+    }
+    catch (err) {
+        console.log('couldnt add toy msg:', err)
+    }
+}
 
-  function getDefaultFilter() {
-    return {  name: '', pageIdx:0, labels: '' }
-  }
+async function addToyReview(toyId, review) {
+    console.log('review:',review)
+    try {
+        const savedReview = await httpService.post(`toy/${toyId}/review`, review)
+        return savedReview
+    }
+    catch (err) {
+        console.log('couldnt add toy msg:', err)
+    }
+}
 
-  function getToysInStock(){
+async function removeToyMsg(toyId, msgId) {
+    try {
+        const savedMsg = await httpService.delete(`toy/${toyId}/msg/${msgId}`)
+        return savedMsg
+    }
+    catch (err) {
+        console.log('couldnt remove toy msg:', err)
+    }
+}
+      
+async function removeToyReview(toyId, reviewId) {
+    try {
+        const savedReview = await httpService.delete(`toy/${toyId}/review/${reviewId}`)
+        return savedReview
+    }
+    catch (err) {
+        console.log('couldnt remove toy review:', err)
+    }
+}
+  
+    
+
+
+
+
+
+function getDefaultFilter() {
+    return { name: '', pageIdx: 0, labels: '' }
+}
+
+function getDefaultSort() {
+    return { value: 'name', change: 1 }
+}
+
+function getToysInStock() {
     let filter = getDefaultFilter()
     filter.inStock = true
     return query(filter)
 
-  }
+}
 
-  function getFilteredToysByLabel(toys){
+function getFilteredToysByLabel(toys) {
     const labels = [
-        { name: 'on-wheels', count: 0},
-        { name: 'box-game', count: 0},
-        { name: 'art', count: 0},
-        { name: 'baby', count: 0},
-        { name: 'doll', count: 0},
-        { name: 'puzzle', count: 0},
-        { name: 'outdoor', count: 0},
-        { name: 'battery-powered', count: 0}
+        { name: 'on-wheels', count: 0 },
+        { name: 'box-game', count: 0 },
+        { name: 'art', count: 0 },
+        { name: 'baby', count: 0 },
+        { name: 'doll', count: 0 },
+        { name: 'puzzle', count: 0 },
+        { name: 'outdoor', count: 0 },
+        { name: 'battery-powered', count: 0 }
     ]
 
 
     toys.map(toy => {
         labels.map(label => {
-            if(toy.labels.includes(label.name)) label.count++
+            if (toy.labels.includes(label.name)) label.count++
         })
     })
 
@@ -86,10 +148,10 @@ function getEmptyToy() {
     labels.map(label => countedLabels.push(label.count))
     return countedLabels
 
-  }
+}
 
-  function getLabels() {
-    return  [
+function getLabels() {
+    return [
         { value: '', label: '---Labels---' },
         { value: 'on-wheels', label: 'On wheels' },
         { value: 'box-game', label: 'Box game' },
@@ -100,26 +162,20 @@ function getEmptyToy() {
         { value: 'outdoor', label: 'Outdoor' },
         { value: 'battery-powered', label: 'Battery Powered' }
     ]
-  }
+}
 
 
 
-  function getPriceMap(toys){
+function getPriceMap(toys) {
     const priceMap = toys.reduce((acc, toy) => {
-        if(toy.labels?.length) {
-              toy.labels.map(label=>{
-                if(!acc[label]) acc[label] = []
+        if (toy.labels?.length) {
+            toy.labels.map(label => {
+                if (!acc[label]) acc[label] = []
                 acc[label].push(toy.price)
             })
         }
-        console.log('acc:',acc)
         return acc
     }, {})
-    console.log('priceMap:',priceMap)
-  }
+    return priceMap
+}
 
-
-//   var x = {
-//     "art": [23],
-//     "wheels": [23,58,5],
-//   }

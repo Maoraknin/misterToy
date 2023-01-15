@@ -1,0 +1,119 @@
+/* Media queries Breakpoint mixins */
+
+@mixin for-mobile-layout {
+  @media (max-width: $break-narrow) {
+    @content;
+  }
+}
+
+@mixin for-narrow-layout {
+  @media (min-width: $break-narrow) {
+    @content;
+  }
+}
+
+@mixin for-normal-layout {
+  @media (min-width: $break-normal) {
+    @content;
+  }
+}
+
+@mixin for-wide-layout {
+  @media (min-width: $break-wide) {
+    @content;
+  }
+}
+
+@mixin layoutGTC($max) {
+  grid-template-columns:
+    minmax($layoutPadding, 1fr) minmax(auto, $max) minmax($layoutPadding, 1fr);
+}
+
+/* Media  Mixins */
+
+//aspect ratio mixin
+@mixin aspect-ratio($width: 1, $height: 1) {
+  position: relative;
+  overflow: hidden;
+
+  &:before {
+    content: "";
+    display: block;
+    width: 100%;
+    padding-top: ($height / $width) * 100%;
+  }
+
+  >* {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  >img {
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Mixin for removing hover efects on iphone screen
+@mixin hover-supported {
+  @media not all and (pointer: coarse) {
+    &:hover {
+      @content;
+    }
+  }
+}
+
+// Buttons
+
+@mixin btn($type: regular, $bg: $clr0, $clr: $clr5, $padding: em(12px) em(24px), $hover: darken($bg, 8%)) {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  // text-transform: uppercase;
+  padding: $padding;
+  line-height: 1.25;
+  font-size: em(14px);
+  font-variation-settings: "wght" 430;
+  border: none;
+  cursor: pointer;
+  background-color: $bg;
+  color: $clr;
+  border: $clr 1px solid ;
+  
+  &:hover {
+    background-color: $clr;
+    color: $bg;
+    border: $bg 1px solid ;
+  }
+
+  transition: background-color 0.2s;
+
+  @if $type ==round {
+    border-radius: 1rem;
+  }
+}
+
+@mixin input($type: regular,  $padding: em(24px) em(44px), $width: 190px) {
+  width: $width;
+  padding: 0.6rem;
+  border: 1px solid $clr5;
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  @if $type ==regular {
+    border-radius: 4px;
+
+  }
+
+  @else if $type ==round {
+    border-radius: 1rem;
+
+  }
+
+}
+

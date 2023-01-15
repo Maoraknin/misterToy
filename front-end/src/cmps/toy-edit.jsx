@@ -7,6 +7,7 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 
 import { toyService } from "../services/toy.service.js"
+import { utilService } from "../services/util.service.js"
 
 
 export function ToyEdit({ editToy }) {
@@ -23,48 +24,36 @@ export function ToyEdit({ editToy }) {
     }, [])
 
 
-    function loadToy() {
-        toyService.getById(toyId)
-            .then((toy) => setEditedToy(toy))
-            .catch((err) => {
-                console.log('Had issues in toy details', err)
-            })
+    async function loadToy() {
+
+        const toy = await toyService.getById(toyId)
+        try {
+            setEditedToy(toy)
+        } catch (err) {
+            console.error('Had issues in toy details', err)
+        }
+
+
+        // toyService.getById(toyId)
+        //     .then((toy) => setEditedToy(toy))
+        //     .catch((err) => {
+        //         console.log('Had issues in toy details', err)
+        //     })
     }
 
     function handleChange({ target }) {
-        console.log('editedToy:', editedToy)
         let { value, type, name: field, checked } = target
         value = type === 'number' ? +value : value
         value = type === 'checkbox' ? checked : value
-        console.log('value:', value)
 
         setEditedToy((prevToy) => {
-            if (field === 'labels') {
-                const idx = editedToy.labels.findIndex(label => label === value)
-                console.log('idx:', idx)
-                if (idx === -1) {
-                    editedToy.labels.push(value)
-                } else {
-                    editedToy.labels.splice(idx, 1)
-                }
-
-                value = editedToy.labels
-                console.log('value:', value)
-            }
             return { ...prevToy, [field]: value }
-
         })
     }
 
     function handleSelectChange(pickedLabels) {
-        const { value } = pickedLabels[pickedLabels.length - 1]
-        console.log('pickedLabels:',pickedLabels)
-        console.log('value:',value)
-
         setEditedToy((prevToy) => {
-            console.log('prevToy:',prevToy)
-            prevToy.labels.push(value)
-            console.log('prevToy.labels:',prevToy.labels)
+            prevToy.labels = pickedLabels.map(label => label.value)
             return { ...prevToy, labels: prevToy.labels }
 
         })
@@ -75,38 +64,33 @@ export function ToyEdit({ editToy }) {
         ev.preventDefault()
         navigate('/toy')
         editToy(editedToy)
-
-
-
     }
 
-    function editToy(toyToSave) {
-        saveToy(toyToSave)
-            .then((savedToy) => {
-                // userService.addActivity(savedToy, 'Edited')
-                showSuccessMsg(`Toy edited (id: ${savedToy._id})`)
-                loadToys()
-                console.log('here');
-            })
-            .catch(err => {
-                showErrorMsg('Cannot add toy')
-            })
+    async function editToy(toyToSave) {
+        if (!toyToSave.imgUrl) toyToSave.imgUrl = `${utilService.getRandomIntInclusive(1, 6)}.png`
+        try {
+            const savedToy = await saveToy(toyToSave)
+            showSuccessMsg(`Toy edited (id: ${savedToy._id})`)
+            loadToys()
+        } catch (err) {
+            showErrorMsg('Cannot add toy')
+        }
+
+
+        // saveToy(toyToSave)
+        //     .then((savedToy) => {
+        //         // userService.addActivity(savedToy, 'Edited')
+        //         showSuccessMsg(`Toy edited (id: ${savedToy._id})`)
+        //         loadToys()
+        //         console.log('here');
+        //     })
+        //     .catch(err => {
+        //         showErrorMsg('Cannot add toy')
+        //     })
 
     }
 
     const labels = toyService.getLabels()
-
-    // const labels = [
-    //     { value: '', label: '---Labels---' },
-    //     { value: 'on-wheels', label: 'On wheels' },
-    //     { value: 'box-game', label: 'Box game' },
-    //     { value: 'art', label: 'Art' },
-    //     { value: 'baby', label: 'Baby' },
-    //     { value: 'doll', label: 'Doll' },
-    //     { value: 'puzzle', label: 'Puzzle' },
-    //     { value: 'outdoor', label: 'Outdoor' },
-    //     { value: 'battery-powered', label: 'Battery Powered' }
-    // ]
 
 
 
@@ -117,7 +101,7 @@ export function ToyEdit({ editToy }) {
 
         </div>
         <form onSubmit={onEditToy} className="add-toy-form">
-            <div>
+            <div className="add-input-container">
                 <label htmlFor="name">Name : </label>
                 <input type="text"
                     name="name"
@@ -127,19 +111,8 @@ export function ToyEdit({ editToy }) {
                     onChange={handleChange}
                 />
             </div>
-            <div>
-                <label htmlFor="labels">Labels : </label>
-                <Select
-                    isMulti
-                    options={labels}
-                    name="labels"
-                    id="labels"
-                    onChange={handleSelectChange}
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                />
-            </div>
-            <div>
+
+            <div className="add-input-container">
                 <label htmlFor="price">Price: </label>
                 <input type="number"
                     name="price"
@@ -148,7 +121,30 @@ export function ToyEdit({ editToy }) {
                     onChange={handleChange}
                 />
             </div>
-            <div className="inStock-container">
+
+            <div className="add-input-container">
+                <label htmlFor="labels">Labels : </label>
+                <Select
+                    isMulti
+                    options={labels}
+                    name="labels"
+                    id="labels"
+                    onChange={handleSelectChange}
+                    // closeMenuOnSelect={false}
+                    // components={animatedComponents}
+                    styles={{
+                        control: (baseStyles, state) => ({
+                            ...baseStyles,
+                            width: '210px',
+                            minHeight: '20px',
+                            fontSize: '1rem',
+                            margin: '0'
+                        }),
+                    }}
+                />
+            </div>
+
+            <div className=" add-input-container inStock-container">
                 <label htmlFor="inStock">inStock</label>
                 <input type="checkbox"
                     id="inStock"
@@ -162,5 +158,5 @@ export function ToyEdit({ editToy }) {
 
         </form>
 
-    </section>
+    </section >
 }

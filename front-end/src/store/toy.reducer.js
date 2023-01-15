@@ -6,18 +6,13 @@ export const REMOVE_TOY = 'REMOVE_TOY'
 export const ADD_TOY = 'ADD_TOY'
 export const UPDATE_TOY = 'UPDATE_TOY'
 export const SET_FILTER = 'SET_FILTER'
+export const SET_SORT = 'SET_SORT'
 export const SET_IS_LOADING = 'SET_IS_LOADING'
 
 const initialState = {
-    toys: [ {
-        _id: "t101",
-        name: "Talking Doll",
-        price: 123,
-        labels: ["Doll", "Battery Powered", "Baby"],
-        createdAt: 1631031801011,
-        inStock: true
-    }],
+    toys: [],
     filterBy: toyService.getDefaultFilter(),
+    sortBy: toyService.getDefaultSort(),
     isLoading: false,
 
 }
@@ -45,6 +40,8 @@ export function toyReducer(state = initialState, action) {
         // filter
         case SET_FILTER:
             return { ...state, filterBy: action.filterBy }
+        case SET_SORT:
+            return { ...state, sortBy: action.sortBy }
 
         default:
             return { ...state }

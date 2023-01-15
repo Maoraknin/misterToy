@@ -1,0 +1,52 @@
+.home {
+    text-align: center;
+    gap: 5rem;
+    padding-top: 50px;
+    background-image: url("../../img/home-background.jpg");
+    // background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    // background-size: 100%;
+    // height: 100%;
+}
+
+.home-title{
+    color: $clr1;
+    font-size: 3rem;
+}
+
+
+
+.home-img-container {
+    margin: auto;
+    align-items: center;
+    gap: 50px;
+
+    img {
+        max-width: 220px;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.05);
+            transition-duration: 400ms;
+        }
+
+
+    }
+
+    .toy-shop-img {
+        max-width: 500px;
+        border-radius: 2rem;
+        min-width: 300px;
+    }
+
+    @media (max-width: 960px) {
+        flex-direction: column;
+        gap: 50px;
+    }
+
+    @media (max-width: 960px) {
+        flex-direction: column;
+        gap: 50px;
+    }
+}

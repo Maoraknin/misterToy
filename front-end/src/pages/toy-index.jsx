@@ -2,28 +2,36 @@
 import { Outlet, Link } from "react-router-dom";
 import { useSelector } from 'react-redux'
 import { useEffect } from "react"
-// import { toyService } from '../services/toy.service.js'
-// import { userService } from '../services/user.service.js'
 import { ToyList } from '../cmps/toy-list.jsx'
 import { ToyFilter } from '../cmps/toy-filter.jsx'
-import { loadToys, removeToy, setFilter } from '../store/toy.action.js'
+import { ToySort } from '../cmps/toy-sort.jsx'
+import { loadToys, removeToy, setFilter, setSort } from '../store/toy.action.js'
 import { showSuccessMsg, showErrorMsg } from '../services/event-bus.service.js'
-// import { update } from '../store/user.action.js'
+import 'animate.css';
+
 
 
 export function ToyIndex() {
 
     const toys = useSelector((storeState) => storeState.toyModule.toys)
     const filterBy = useSelector((storeState) => storeState.toyModule.filterBy)
+    const sortBy = useSelector((storeState) => storeState.toyModule.sortBy)
     const isLoading = useSelector((storeState) => storeState.toyModule.isLoading)
+    const user = useSelector((storeState) => storeState.userModule.user)
 
 
     useEffect(() => {
-        loadToys(filterBy)
-    }, [filterBy])
+        loadToys(filterBy, sortBy)
+        // console.log('user.isAdmin:', user.isAdmin)
+    }, [filterBy, sortBy])
 
     function setFilterBy(filterBy) {
         setFilter(filterBy)
+    }
+
+    function onSetSort(sortBy) {
+        console.log('here');
+        setSort(sortBy)
     }
 
     function onNavPage(val) {
@@ -33,48 +41,45 @@ export function ToyIndex() {
         setFilter(newFilter)
     }
 
-    function onRemoveToy(toy) {
+    async function onRemoveToy(toy) {
         // userService.addActivity(toy, 'Removed')
-        removeToy(toy)
-            .then(() => {
-                showSuccessMsg('Toy removed')
-            })
-            .catch(err => {
-                showErrorMsg('Cannot remove toy')
-            })
+        try {
+            await removeToy(toy)
+            showSuccessMsg('Toy removed')
+        } catch (err) {
+            showErrorMsg('Cannot remove toy')
+        }
+
     }
 
 
 
-    return <section className="toy-index">
+    return <section className="toy-index animate__animated animate__fadeIn">
         <h1 className='toy-index-title'>My Toys:</h1>
         <main className='index-container'>
             <div className='toy-actions-container'>
                 <ToyFilter setFilterBy={setFilterBy} />
-                {/* <ToyFilter /> */}
-                {/* <div className='flex justify-center'>
-                    <button onClick={onAddToy} className="add-toy-btn">Add Toy</button>
-                </div> */}
+                <ToySort onSetSort={onSetSort} />
                 <div className='add-toy-container'>
-                <Link to="/toy/edit" className= "add-toy-btn">Add Toy</Link>
+                    {user && user.isAdmin && <Link to="/toy/edit" className="add-toy-btn">Add Toy</Link>}
 
-                <Outlet/>
+                    <Outlet />
                 </div>
             </div>
 
-            {/* <ToyList /> */}
             {isLoading ? <p>Loading...</p> : <div>{toys.length ? <ToyList
                 toys={toys}
                 onRemoveToy={onRemoveToy}
+                user={user}
             /> : <h1>No toys to show</h1>}</div>
             }
 
             <div className="index-toy-nav">
                 <a onClick={() => onNavPage(-1)}>
                     <span className="material-symbols-outlined">arrow_back</span>
-                    Previous Book</a>
-                <a onClick={() => onNavPage(1)}>Next Book
-                <span className="material-symbols-outlined">arrow_forward</span>
+                    Previous Page</a>
+                <a onClick={() => onNavPage(1)}>Next Page
+                    <span className="material-symbols-outlined">arrow_forward</span>
                 </a>
             </div>
         </main>

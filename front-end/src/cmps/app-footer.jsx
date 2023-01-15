@@ -5,7 +5,7 @@ export function AppFooter() {
 
 
     return (
-        <footer>
+        <footer className="full main-layout">
             <p>
                 coffeerights to all
 
