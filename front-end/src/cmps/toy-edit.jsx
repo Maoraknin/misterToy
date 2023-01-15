@@ -7,6 +7,7 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated';
 
 import { toyService } from "../services/toy.service.js"
+import { uploadService } from "../services/upload.service"
 import { utilService } from "../services/util.service.js"
 
 
@@ -25,26 +26,24 @@ export function ToyEdit({ editToy }) {
 
 
     async function loadToy() {
-
         const toy = await toyService.getById(toyId)
         try {
             setEditedToy(toy)
         } catch (err) {
             console.error('Had issues in toy details', err)
         }
-
-
-        // toyService.getById(toyId)
-        //     .then((toy) => setEditedToy(toy))
-        //     .catch((err) => {
-        //         console.log('Had issues in toy details', err)
-        //     })
     }
 
-    function handleChange({ target }) {
-        let { value, type, name: field, checked } = target
+   async function handleChange(ev) {
+        let { value, type, name: field, checked } = ev.target
         value = type === 'number' ? +value : value
         value = type === 'checkbox' ? checked : value
+
+        if(type === 'file'){
+            const url = await uploadService.uploadImg(ev)
+            field = 'imgUrl'
+            value = url
+        } 
 
         setEditedToy((prevToy) => {
             return { ...prevToy, [field]: value }
@@ -111,6 +110,9 @@ export function ToyEdit({ editToy }) {
                     onChange={handleChange}
                 />
             </div>
+            <label> Upload your image to cloudinary!
+                <input onChange={handleChange} type="file"/>
+            </label>
 
             <div className="add-input-container">
                 <label htmlFor="price">Price: </label>
