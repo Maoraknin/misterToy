@@ -68,6 +68,7 @@ async function addToyMsg(req, res) {
   const {loggedinUser} = req
   try {
     const toyId = req.params.id
+    // console.log('loggedinUser:',loggedinUser)
     const msg = {
       txt: req.body.txt,
       by: loggedinUser

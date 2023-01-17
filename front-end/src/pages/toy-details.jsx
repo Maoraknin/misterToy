@@ -5,6 +5,7 @@ import { toyService } from "../services/toy.service.js"
 import { utilService } from "../services/util.service.js"
 import { useSelector } from 'react-redux'
 import { loadReviews, addReview, removeReview } from '../store/review.actions'
+import { ChatRoom } from '../cmps/ChatRoom.jsx'
 // import { Link, useNavigate, useParams } from "react-router-dom"
 
 import 'animate.css';
@@ -28,7 +29,7 @@ export function ToyDetails() {
 
         try {
             const toy = await toyService.getById(toyId)
-            console.log('here');
+            console.log(toy);
             setToy(toy)
         } catch (err) {
             console.log('Had issues in toy details', err)
@@ -56,31 +57,7 @@ export function ToyDetails() {
     }
 
 
-    async function onAddMsg(ev) {
-        ev.preventDefault()
-        const { msg } = ev.target
-        const txt = msg.value
-        msg.value = ''
-        try {
-            const savedToy = await toyService.addToyMsg(toyId, txt)
-            loadToy()
-            showSuccessMsg(`Toy msg added (id: ${savedToy._id})`)
-        } catch (err) {
-            showErrorMsg('Cannot add toy msg')
-        }
-    }
-
-    async function onRemoveMsg(msgId) {
-        console.log('msgId:', msgId)
-
-        try {
-            const savedToy = await toyService.removeToyMsg(toyId, msgId)
-            loadToy()
-            showSuccessMsg(`Toy msg deleted (id: ${savedToy._id})`)
-        } catch (err) {
-            showErrorMsg('Cannot delete toy msg')
-        }
-    }
+   
 
     async function onRemoveReview(reviewId) {
 
@@ -99,7 +76,7 @@ export function ToyDetails() {
     return (
         <article className="animate__animated animate__fadeIn">
             {toy ? <div>
-                <img className='details-toy-img' src={require(`../assets/img/toys/${toy.imgUrl}`)} />
+                <img className='details-toy-img' src={toy.imgUrl} />
 
                 <p>{toy.name}</p>
                 <p>{toy.price}$</p>
@@ -113,20 +90,9 @@ export function ToyDetails() {
 
             <Link to="/toy">Back to List</Link>
 
-            <div>
-                {user &&
-                    <div>
-                        <form onSubmit={onAddMsg} className="add-msg-form" id="msg-form">
-                            <textarea placeholder="Enter msg..." name="msg" form="msg-form" className="msg-input"></textarea>
-                            <button className="add-msg-btn">Add Msg</button>
-                        </form>
-                    </div>}
+            {user && toy && <ChatRoom toyId = {toyId} toy = {toy} user = {user}/>}
 
-                {toy && toy.msgs && <ul>
-                    {toy.msgs.map(msg => {
-                        return <li key={msg.id}><div className="msg-container"><span>{msg.txt}</span>{user.isAdmin && <span onClick={() => onRemoveMsg(msg.id)} className="material-symbols-outlined remove-msg">close</span>}</div></li>
-                    })}</ul>}
-            </div>
+           
 
             <div>
                 {user &&

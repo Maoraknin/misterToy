@@ -19,24 +19,6 @@ export function UserDetails() {
     // loadUsers()
   }, [])
 
-  const handleChange = ev => {
-    const { name, value } = ev.target
-    setReviewToEdit({ ...reviewToEdit, [name]: value })
-  }
-
-  const onAddReview = async ev => {
-    ev.preventDefault()
-    if (!reviewToEdit.txt || !reviewToEdit.aboutUserId) return alert('All fields are required')
-    try {
-
-      await addReview(reviewToEdit)
-      showSuccessMsg('Review added')
-      setReviewToEdit({ txt: '', aboutUserId: '' })
-    } catch (err) {
-      showErrorMsg('Cannot add review')
-    }
-  }
-
   const onRemove = async reviewId => {
     try {
       await removeReview(reviewId)

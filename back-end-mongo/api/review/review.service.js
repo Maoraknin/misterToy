@@ -94,7 +94,6 @@ async function add(review) {
 }
 
 function _buildCriteria(filterBy) {
-    console.log('filterBy:',filterBy)
     const criteria = {}
     if (filterBy.user) criteria.byUserId = ObjectId(filterBy.user)
     return criteria
